@@ -1,7 +1,7 @@
-# Jobsearch_backend_py\src\data\jobsearch_db_context.py
+# src\data\jobsearch_db_context.py
 
 from sqlalchemy.orm import Session
-from src.models.entities import Job, SearchTerm, JobSearchTerm
+from src.models.db_models import Job, SearchTerm, JobSearchTerm
 
 class JobsearchDbContext:
     """

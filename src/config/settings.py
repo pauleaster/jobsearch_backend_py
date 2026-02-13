@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\config\settings.py
+# src\config\settings.py
 
 from pydantic_settings import BaseSettings
 from typing import Optional

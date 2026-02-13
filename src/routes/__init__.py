@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\controllers\__init__.py
+# src\controllers\__init__.py
 
 from .job_controller import router as job_router
 from .search_term_controller import router as search_term_router

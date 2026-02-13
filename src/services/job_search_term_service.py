@@ -1,9 +1,9 @@
-# Jobsearch_backend_py\src\services\job_search_term_service.py
+# src\services\job_search_term_service.py
 
 from abc import ABC, abstractmethod
 from typing import List
 from sqlalchemy.orm import Session
-from src.models.entities.job_search_term import JobSearchTerm
+from src.models.db_models.job_search_term import JobSearchTerm
 
 class IJobSearchTermService(ABC):
     @abstractmethod

@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\exceptions\not_found_exception.py
+# src\exceptions\not_found_exception.py
 
 class NotFoundException(Exception):
     """Exception raised when a requested resource is not found."""

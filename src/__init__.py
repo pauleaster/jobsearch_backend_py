@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\__init__.py
+# src\__init__.py
 
 """Jobsearch Backend API - Python Version"""
 
