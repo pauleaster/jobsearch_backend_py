@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.config import settings
-from src.controllers import job_router, search_term_router, test_router
+from src.routes import job_controller, search_term_controller, test_controller, valid_job_search_terms_controller
 
 # Create FastAPI application
 app = FastAPI(
@@ -20,9 +20,10 @@ app.add_middleware(
 )
 
 # Include routers
-app.include_router(job_router)
-app.include_router(search_term_router)
-app.include_router(test_router)
+app.include_router(job_controller.router)
+app.include_router(search_term_controller.router)
+app.include_router(test_controller.router)
+app.include_router(valid_job_search_terms_controller.router)  # ADD THIS LINE
 
 @app.get("/")
 def root():

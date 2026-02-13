@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\data\__init__.py
+# src\data\__init__.py
 
 from .jobsearch_db_context import JobsearchDbContext
 

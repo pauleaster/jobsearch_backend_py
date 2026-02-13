@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\services\__init__.py
+# src\services\__init__.py
 
 from .job_service import JobService, IJobService
 from .search_term_service import SearchTermService, ISearchTermService

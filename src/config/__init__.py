@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\config\__init__.py
+# src\config\__init__.py
 
 from .settings import settings
 from .database import get_db, Base, engine

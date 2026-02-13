@@ -1,9 +1,9 @@
-# Jobsearch_backend_py\src\models\__init__.py
+# src\models\__init__.py
 
-from .entities import Job, SearchTerm, JobSearchTerm
-from .dtos import JobDto, JobPatchFieldDto, SearchTermDto, SearchTermString, FilterTermsRequestDto
+from .db_models import Job, SearchTerm, JobSearchTerm
+from .api_models import JobSchema, JobPatchFieldSchema, SearchTermSchema, SearchTermStringSchema, FilterTermsRequestSchema
 
 __all__ = [
-    "Job", "SearchTerm", "JobSearchTerm",
-    "JobDto", "JobPatchFieldDto", "SearchTermDto", "SearchTermString", "FilterTermsRequestDto"
+    "JobSchema", "SearchTermSchema", "JobSearchTerm",
+    "JobSchema", "JobPatchFieldSchema", "SearchTermSchema", "SearchTermStringSchema", "FilterTermsRequestSchema"
 ]

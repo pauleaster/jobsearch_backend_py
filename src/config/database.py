@@ -1,4 +1,4 @@
-# Jobsearch_backend_py\src\config\database.py
+# src\config\database.py
 
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
