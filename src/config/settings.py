@@ -1,6 +1,7 @@
 # src\config\settings.py
 
 from pydantic_settings import BaseSettings
+from pydantic import ConfigDict
 from typing import Optional
 
 class Settings(BaseSettings):
@@ -16,6 +17,11 @@ class Settings(BaseSettings):
     DB_USER: Optional[str] = None
     DB_PASSWORD: Optional[str] = None
     DB_TRUSTED_CONNECTION: bool = True
+
+    model_config = ConfigDict(
+        env_file=".env.local",  # Changed from ".env"
+        case_sensitive=True
+    )
     
     @property
     def DATABASE_URL(self) -> str:
@@ -34,9 +40,5 @@ class Settings(BaseSettings):
                 f"&Encrypt=yes"
                 f"&TrustServerCertificate=yes"
             )
-    
-    class Config:
-        env_file = ".env.local"  # Changed from ".env"
-        case_sensitive = True
 
 settings = Settings()

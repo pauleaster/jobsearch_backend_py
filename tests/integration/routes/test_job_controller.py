@@ -1,5 +1,5 @@
-import pytest
-from tests.integration.utils.routes import client
+
+from tests.integration.utils.routes import client # pylint: disable=import-error
 
 def test_get_all_jobs():
     response = client.get("/api/jobs/")

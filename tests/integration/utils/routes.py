@@ -4,7 +4,7 @@ print("Directory contents:", os.listdir(os.getcwd()))
 
 
 from fastapi.testclient import TestClient
-from src.main import app
+from src.main import app # pylint: disable=import-error
 
 client = TestClient(app)
 

@@ -1,4 +1,4 @@
-# src\models\dtos\__init__.py
+# src\models\api_models\__init__.py
 
 from .job import JobSchema, JobPatchFieldSchema
 from .search_term import SearchTermSchema, SearchTermStringSchema, FilterTermsRequestSchema

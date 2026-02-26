@@ -16,8 +16,8 @@ class ValidJobSearchTerm(BaseModel):
 class FilterTermsRequest(BaseModel):
     """DTO for filtering request"""
     filter_terms: List[str] = Field(alias="filterTerms")
-    current_jobs: Optional[bool] = Field(None, alias="currentJobs")
-    applied_jobs: Optional[bool] = Field(None, alias="appliedJobs")
+    current_job: Optional[bool] = Field(None, alias="currentJob")
+    applied_job: Optional[bool] = Field(None, alias="appliedJob")
     
     model_config = ConfigDict(populate_by_name=True)
     
