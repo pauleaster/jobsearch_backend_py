@@ -13,13 +13,15 @@ class ValidJobSearchTermsService:
     def __init__(self, db: Session):
         self.db = db
 
-    def get_valid_job_search_terms(self) -> List[ValidJobSearchTerm]:
+    def get_valid_job_search_terms(self, skip: int = 0, limit: int = 100) -> List[ValidJobSearchTerm]:
         """Get all jobs with their associated valid search terms"""
         results = (
             self.db.query(Job.job_id, Job.job_number, SearchTerm.term_text)
             .join(JobSearchTerm, Job.job_id == JobSearchTerm.job_id)
             .join(SearchTerm, JobSearchTerm.term_id == SearchTerm.term_id)
             .filter(JobSearchTerm.valid == True)
+            .offset(skip)
+            .limit(limit)
             .all()
         )
 
@@ -49,6 +51,8 @@ class ValidJobSearchTermsService:
         search_term_string: SearchTermString,
         current_job: Optional[bool],
         applied_job: Optional[bool],
+        skip: int = 0,
+        limit: int = 100,
     ) -> List[ValidJobSearchTerm]:
         """Get filtered jobs with their associated valid search terms"""
         query = (
@@ -67,7 +71,7 @@ class ValidJobSearchTermsService:
         if applied_job is not None:
             query = query.filter(Job.applied == applied_job)
 
-        results = query.all()
+        results = query.order_by(Job.job_id).offset(skip).limit(limit).all()
 
         # Group by job_id to combine matching terms
         job_terms = {}
