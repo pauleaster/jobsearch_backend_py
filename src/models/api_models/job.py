@@ -1,14 +1,13 @@
-# src\models\dtos\job_dto.py
+# src\models\api_models\job.py
 
 from pydantic import BaseModel, ConfigDict, Field
-from typing import Optional, List
+from typing import Optional, Union, List
 from datetime import datetime
 
 class JobSchema(BaseModel):
     model_config = ConfigDict(from_attributes=True, populate_by_name=True)
     
     job_id: Optional[int] = Field(None, alias="Id")
-    old_job_id: Optional[int] = None
     job_number: Optional[int] = None
     job_url: Optional[str] = Field(None, alias="Url")
     title: Optional[str] = Field(None, alias="Title")
@@ -23,7 +22,14 @@ class JobSchema(BaseModel):
     job_date: Optional[datetime] = Field(None, alias="JobDate")
     unsuccessful: Optional[str] = Field(None, alias="Unsuccessful")
     search_terms: Optional[List[str]] = Field(None, alias="SearchTerms")
+    salary: Optional[str] = None
+    position: Optional[str] = None
+    advertiser: Optional[str] = None
+    location: Optional[str] = None
+    work_type: Optional[str] = None
+    expired: Optional[bool] = None
+    updated_at: Optional[datetime] = None
 
 class JobPatchFieldSchema(BaseModel):
     field: str
-    value: Optional[str] = None
+    value: Optional[Union[str, bool]] = None

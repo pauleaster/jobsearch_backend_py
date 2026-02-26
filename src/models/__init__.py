@@ -1,6 +1,6 @@
 # src\models\__init__.py
 
-from .db_models import Job, SearchTerm, JobSearchTerm
+from .db_models import JobSearchTerm
 from .api_models import JobSchema, JobPatchFieldSchema, SearchTermSchema, SearchTermStringSchema, FilterTermsRequestSchema
 
 __all__ = [

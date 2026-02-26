@@ -27,6 +27,6 @@ def get_filtered_valid_job_search_terms(
     service = ValidJobSearchTermsService(db)
     return service.get_filtered_valid_job_search_terms(
         search_term_string,
-        request_dto.current_jobs,
-        request_dto.applied_jobs
+        request_dto.current_job,
+        request_dto.applied_job
     )

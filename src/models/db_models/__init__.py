@@ -1,4 +1,4 @@
-# src\models\entities\__init__.py
+# src\models\db_models\__init__.py
 
 from .job import Job
 from .search_term import SearchTerm
