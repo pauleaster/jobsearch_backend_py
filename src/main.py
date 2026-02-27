@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.config import settings
 from src.routes import (
+    combined_job_search_controller,
     job_controller,
     search_term_controller,
     test_controller,
@@ -28,7 +29,8 @@ app.add_middleware(
 app.include_router(job_controller.router)
 app.include_router(search_term_controller.router)
 app.include_router(test_controller.router)
-app.include_router(valid_job_search_terms_controller.router)  # ADD THIS LINE
+app.include_router(valid_job_search_terms_controller.router)
+app.include_router(combined_job_search_controller.router)
 
 
 @app.get("/")
