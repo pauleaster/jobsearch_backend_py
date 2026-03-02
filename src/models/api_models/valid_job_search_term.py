@@ -18,6 +18,7 @@ class FilterTermsRequest(BaseModel):
     filter_terms: List[str] = Field(alias="filterTerms")
     current_job: Optional[bool] = Field(None, alias="currentJob")
     applied_job: Optional[bool] = Field(None, alias="appliedJob")
+    remote_job: Optional[bool] = Field(None, alias="remoteJob")
     skip: int = Field(0, ge=0)
     limit: int = Field(100, ge=1, le=1000)
     model_config = ConfigDict(populate_by_name=True)
