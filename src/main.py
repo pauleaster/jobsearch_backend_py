@@ -1,3 +1,5 @@
+import logging
+import sys
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from src.config import settings
@@ -8,6 +10,19 @@ from src.routes import (
     test_controller,
     valid_job_search_terms_controller,
 )
+
+# Configure the timing logger
+timing_logger = logging.getLogger('timing')
+timing_handler = logging.FileHandler('timing.log')
+timing_formatter = logging.Formatter('%(asctime)s | %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+timing_handler.setFormatter(timing_formatter)
+timing_logger.addHandler(timing_handler)
+timing_logger.setLevel(logging.INFO)
+
+# Optionally also print slow requests to console
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setFormatter(timing_formatter)
+timing_logger.addHandler(console_handler)
 
 # Create FastAPI application
 app = FastAPI(
