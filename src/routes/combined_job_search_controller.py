@@ -24,6 +24,7 @@ def filtered_combined_jobs_and_search_terms(
         current_job=request.current_job,
         applied_job=request.applied_job,
         remote_job=request.remote_job,
+        follow_up_selection_mode=request.follow_up_selection_mode,
     )
     response.headers["X-Total-Count"] = str(total)
     response.headers["X-Page-Size"] = str(request.limit)
@@ -33,6 +34,10 @@ def filtered_combined_jobs_and_search_terms(
         current_job=request.current_job,
         applied_job=request.applied_job,
         remote_job=request.remote_job,
+        follow_up_selection_mode=request.follow_up_selection_mode,
         skip=request.skip,
         limit=request.limit,
+        sort_mode=request.sort_mode,
+        sort_by=request.sort_by,
+        sort_dir=request.sort_dir,
     )
