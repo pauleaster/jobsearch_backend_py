@@ -28,6 +28,7 @@ class Job(Base):
     location = Column(Text, nullable=True)
     work_type = Column(Text, nullable=True)
     expired = Column(Boolean, nullable=True)
+    visited = Column(Boolean, nullable=False, default=False)
     updated_at = Column(DateTime, default=datetime.now, onupdate=datetime.now, nullable=True)
 
     job_search_terms = relationship("JobSearchTerm", back_populates="job")

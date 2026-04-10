@@ -28,8 +28,12 @@ class JobSchema(BaseModel):
     location: Optional[str] = None
     work_type: Optional[str] = None
     expired: Optional[bool] = None
+    visited: Optional[bool] = None
     updated_at: Optional[datetime] = None
 
 class JobPatchFieldSchema(BaseModel):
     field: str
     value: Optional[Union[str, bool]] = None
+
+class VisitedUpdateSchema(BaseModel):
+    visited: bool

@@ -51,6 +51,7 @@ class ValidJobSearchTermsService:
         search_term_string: SearchTermString,
         current_job: Optional[bool],
         applied_job: Optional[bool],
+        excluded_search_terms: Optional[List[str]] = None,
         skip: int = 0,
         limit: int = 100,
     ) -> List[ValidJobSearchTerm]:
@@ -70,6 +71,16 @@ class ValidJobSearchTermsService:
 
         if applied_job is not None:
             query = query.filter(Job.applied == applied_job)
+
+        if excluded_search_terms and any(t for t in excluded_search_terms if t):
+            excluded_job_ids_subq = (
+                self.db.query(JobSearchTerm.job_id)
+                .join(SearchTerm, JobSearchTerm.term_id == SearchTerm.term_id)
+                .filter(JobSearchTerm.valid == True)
+                .filter(SearchTerm.term_text.in_(excluded_search_terms))
+                .subquery()
+            )
+            query = query.filter(~Job.job_id.in_(excluded_job_ids_subq))
 
         results = query.order_by(Job.job_id).offset(skip).limit(limit).all()
 

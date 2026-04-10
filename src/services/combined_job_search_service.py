@@ -42,11 +42,13 @@ class CombinedJobSearchService:
 
     def _build_filtered_query(
         self,
+        required_terms: Optional[List[str]],
         filter_terms: Optional[List[str]],
         current_job: Optional[bool],
         applied_job: Optional[bool],
         remote_job: Optional[bool],
         follow_up_selection_mode: Optional[bool],
+        excluded_search_terms: Optional[List[str]] = None,
     ):
         query = self.db.query(Job)
 
@@ -84,9 +86,27 @@ class CombinedJobSearchService:
             .join(SearchTerm, JobSearchTerm.term_id == SearchTerm.term_id)
             .filter(JobSearchTerm.valid == True)
         )
+        if required_terms:
+            for term in required_terms:
+                required_job_ids = (
+                    self.db.query(JobSearchTerm.job_id)
+                    .join(SearchTerm, JobSearchTerm.term_id == SearchTerm.term_id)
+                    .filter(SearchTerm.term_text == term)
+                    .filter(JobSearchTerm.valid == True)
+                )
+                query = query.filter(Job.job_id.in_(required_job_ids))
         # Only narrow to specific terms when a non-empty list is provided
         if filter_terms:
             query = query.filter(SearchTerm.term_text.in_(filter_terms))
+
+        if excluded_search_terms:
+            excluded_job_ids = (
+                self.db.query(JobSearchTerm.job_id)
+                .join(SearchTerm, JobSearchTerm.term_id == SearchTerm.term_id)
+                .filter(SearchTerm.term_text.in_(excluded_search_terms))
+                .filter(JobSearchTerm.valid == True)
+            )
+            query = query.filter(~Job.job_id.in_(excluded_job_ids))
 
         return query
 
@@ -153,14 +173,17 @@ class CombinedJobSearchService:
 
     def get_combined_jobs_total(
         self,
+        required_terms: Optional[List[str]] = None,
         filter_terms: Optional[List[str]] = None,
         current_job: Optional[bool] = None,
         applied_job: Optional[bool] = None,
         remote_job: Optional[bool] = None,
         follow_up_selection_mode: Optional[bool] = None,
+        excluded_search_terms: Optional[List[str]] = None,
     ) -> int:
         query = self._build_filtered_query(
-            filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode
+            required_terms, filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode,
+            excluded_search_terms=excluded_search_terms
         )
         return (
             query.with_entities(func.count(distinct(Job.job_id))).scalar() or 0
@@ -168,11 +191,13 @@ class CombinedJobSearchService:
 
     def get_combined_jobs(
         self,
+        required_terms: Optional[List[str]] = None,
         filter_terms: Optional[List[str]] = None,
         current_job: Optional[bool] = None,
         applied_job: Optional[bool] = None,
         remote_job: Optional[bool] = None,
         follow_up_selection_mode: Optional[bool] = None,
+        excluded_search_terms: Optional[List[str]] = None,
         skip: int = 0,
         limit: int = 100,
         sort_mode: str = "algorithm",
@@ -194,7 +219,8 @@ class CombinedJobSearchService:
         # Timing: Build filtered query
         query_start = time.time()
         query = self._build_filtered_query(
-            filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode
+            required_terms, filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode,
+            excluded_search_terms=excluded_search_terms
         )
         query_build_time = time.time() - query_start
         timing_logger.info(

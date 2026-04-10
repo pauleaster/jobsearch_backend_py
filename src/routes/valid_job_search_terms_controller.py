@@ -33,6 +33,7 @@ def get_filtered_valid_job_search_terms(
         search_term_string,
         request_dto.current_job,
         request_dto.applied_job,
+        excluded_search_terms=request_dto.excluded_search_terms,
         skip=request_dto.skip,
         limit=request_dto.limit
     )

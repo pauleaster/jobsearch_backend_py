@@ -106,6 +106,15 @@ class JobService:
         self.db.commit()
         self.db.refresh(job)
         return JobSchema.model_validate(job)
+    
+    def set_visited(self, job_id: int, visited: bool) -> JobSchema:
+        job = self.db.query(Job).filter(Job.job_id == job_id).first()
+        if not job:
+            raise NotFoundException(f"Job with ID {job_id} not found")
+        job.visited = visited
+        self.db.commit()
+        self.db.refresh(job)
+        return JobSchema.model_validate(job)
 
     def delete_job(self, job_id: int) -> None:
         job = self.db.query(Job).filter(Job.job_id == job_id).first()

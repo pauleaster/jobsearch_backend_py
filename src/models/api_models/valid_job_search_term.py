@@ -15,7 +15,9 @@ class ValidJobSearchTerm(BaseModel):
 
 class FilterTermsRequest(BaseModel):
     """DTO for filtering request"""
+    required_terms: Optional[List[str]] =  Field([], alias="requiredTerms")
     filter_terms: List[str] = Field(alias="filterTerms")
+    excluded_search_terms: List[str] = Field([], alias="excludedSearchTerms")
     current_job: Optional[bool] = Field(None, alias="currentJob")
     applied_job: Optional[bool] = Field(None, alias="appliedJob")
     remote_job: Optional[bool] = Field(None, alias="remoteJob")
@@ -31,7 +33,7 @@ class FilterTermsRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     
     def __str__(self):
-        return f"FilterTerms: [{', '.join(self.filter_terms)}], CurrentJob: {self.current_job}, AppliedJob: {self.applied_job}, RemoteJob: {self.remote_job}, FollowUpSelectionMode: {self.follow_up_selection_mode}, Skip: {self.skip}, Limit: {self.limit}, SortMode: {self.sort_mode}, SortBy: {self.sort_by}, SortDir: {self.sort_dir}"
+        return f"FilterTerms: [{', '.join(self.filter_terms)}], ExcludedSearchTerms: [{', '.join(self.excluded_search_terms)}], CurrentJob: {self.current_job}, AppliedJob: {self.applied_job}, RemoteJob: {self.remote_job}, FollowUpSelectionMode: {self.follow_up_selection_mode}, Skip: {self.skip}, Limit: {self.limit}, SortMode: {self.sort_mode}, SortBy: {self.sort_by}, SortDir: {self.sort_dir}"
 
 
 class SearchTermString(BaseModel):

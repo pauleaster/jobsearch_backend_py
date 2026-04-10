@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from typing import List, Optional
 from src.config.database import get_db
 from src.services.job_service import JobService
-from src.models.api_models.job import JobSchema, JobPatchFieldSchema
+from src.models.api_models.job import JobSchema, JobPatchFieldSchema, VisitedUpdateSchema
 from src.exceptions import NotFoundException
 
 router = APIRouter(prefix="/api/jobs", tags=["Jobs"])
@@ -75,5 +75,15 @@ def delete_job(job_id: int, db: Session = Depends(get_db)):
     service = JobService(db)
     try:
         service.delete_job(job_id)
+    except NotFoundException as e:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))
+    
+
+@router.put("/{job_id}/visited", response_model=JobSchema)
+def set_visited(job_id: int, body: VisitedUpdateSchema, db: Session = Depends(get_db)):
+    """Set or reset the visited flag for a job."""
+    service = JobService(db)
+    try:
+        return service.set_visited(job_id, body.visited)
     except NotFoundException as e:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(e))

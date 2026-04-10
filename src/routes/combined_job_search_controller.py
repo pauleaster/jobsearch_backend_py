@@ -20,21 +20,25 @@ def filtered_combined_jobs_and_search_terms(
     """
     service = CombinedJobSearchService(db)
     total = service.get_combined_jobs_total(
+        required_terms=request.required_terms,
         filter_terms=request.filter_terms,
         current_job=request.current_job,
         applied_job=request.applied_job,
         remote_job=request.remote_job,
         follow_up_selection_mode=request.follow_up_selection_mode,
+        excluded_search_terms=request.excluded_search_terms,
     )
     response.headers["X-Total-Count"] = str(total)
     response.headers["X-Page-Size"] = str(request.limit)
 
     return service.get_combined_jobs(
+        required_terms=request.required_terms,
         filter_terms=request.filter_terms,
         current_job=request.current_job,
         applied_job=request.applied_job,
         remote_job=request.remote_job,
         follow_up_selection_mode=request.follow_up_selection_mode,
+        excluded_search_terms=request.excluded_search_terms,
         skip=request.skip,
         limit=request.limit,
         sort_mode=request.sort_mode,
