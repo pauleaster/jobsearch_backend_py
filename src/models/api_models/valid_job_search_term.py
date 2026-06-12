@@ -22,6 +22,7 @@ class FilterTermsRequest(BaseModel):
     applied_job: Optional[bool] = Field(None, alias="appliedJob")
     remote_job: Optional[bool] = Field(None, alias="remoteJob")
     follow_up_selection_mode: Optional[bool] = Field(None, alias="followUpSelectionMode")
+    follow_up_active: Optional[bool] = Field(None, alias="followUpActive")  # True = follow_up IS NOT NULL AND != "no"
     skip: int = Field(0, ge=0)
     limit: int = Field(100, ge=1, le=1000)
 
@@ -33,7 +34,7 @@ class FilterTermsRequest(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
     
     def __str__(self):
-        return f"FilterTerms: [{', '.join(self.filter_terms)}], ExcludedSearchTerms: [{', '.join(self.excluded_search_terms)}], CurrentJob: {self.current_job}, AppliedJob: {self.applied_job}, RemoteJob: {self.remote_job}, FollowUpSelectionMode: {self.follow_up_selection_mode}, Skip: {self.skip}, Limit: {self.limit}, SortMode: {self.sort_mode}, SortBy: {self.sort_by}, SortDir: {self.sort_dir}"
+        return f"FilterTerms: [{', '.join(self.filter_terms)}], ExcludedSearchTerms: [{', '.join(self.excluded_search_terms)}], CurrentJob: {self.current_job}, AppliedJob: {self.applied_job}, RemoteJob: {self.remote_job}, FollowUpSelectionMode: {self.follow_up_selection_mode}, FollowUpActive: {self.follow_up_active}, Skip: {self.skip}, Limit: {self.limit}, SortMode: {self.sort_mode}, SortBy: {self.sort_by}, SortDir: {self.sort_dir}"
 
 
 class SearchTermString(BaseModel):

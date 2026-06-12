@@ -5,6 +5,7 @@ import time
 import logging
 from sqlalchemy.orm import Session
 from sqlalchemy import or_, func, cast, String, distinct
+from sqlalchemy.sql.functions import count
 from src.models.db_models.job import Job
 from src.models.db_models.job_search_term import JobSearchTerm
 from src.models.db_models.search_term import SearchTerm
@@ -48,6 +49,7 @@ class CombinedJobSearchService:
         applied_job: Optional[bool],
         remote_job: Optional[bool],
         follow_up_selection_mode: Optional[bool],
+        follow_up_active: Optional[bool] = None,
         excluded_search_terms: Optional[List[str]] = None,
     ):
         query = self.db.query(Job)
@@ -60,7 +62,11 @@ class CombinedJobSearchService:
             query = query.filter(Job.expired == False)
 
         if applied_job is not None:
-            query = query.filter(Job.applied == applied_job)
+            applied_norm = func.lower(func.ltrim(func.rtrim(cast(Job.applied, String))))
+            if applied_job:
+                query = query.filter(applied_norm == "yes")
+            else:
+                query = query.filter(or_(Job.applied.is_(None), applied_norm != "yes"))
 
         if remote_job is not None:
             location_lower = func.lower(cast(Job.location, String))
@@ -79,6 +85,15 @@ class CombinedJobSearchService:
                 query = query.filter(
                     or_(Job.follow_up.is_(None), follow_up_norm != "no")
                 )
+
+        if follow_up_active is True:
+            follow_up_norm = func.lower(
+                func.ltrim(func.rtrim(cast(Job.follow_up, String)))
+            )
+            query = query.filter(
+                Job.follow_up.is_not(None),
+                follow_up_norm != "no",
+            )
 
         # Always require at least one valid search term
         query = (
@@ -179,14 +194,16 @@ class CombinedJobSearchService:
         applied_job: Optional[bool] = None,
         remote_job: Optional[bool] = None,
         follow_up_selection_mode: Optional[bool] = None,
+        follow_up_active: Optional[bool] = None,
         excluded_search_terms: Optional[List[str]] = None,
     ) -> int:
         query = self._build_filtered_query(
             required_terms, filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode,
+            follow_up_active=follow_up_active,
             excluded_search_terms=excluded_search_terms
         )
         return (
-            query.with_entities(func.count(distinct(Job.job_id))).scalar() or 0
+            query.with_entities(count(distinct(Job.job_id))).scalar() or 0
         )  # pylint: disable=E1102
 
     def get_combined_jobs(
@@ -197,6 +214,7 @@ class CombinedJobSearchService:
         applied_job: Optional[bool] = None,
         remote_job: Optional[bool] = None,
         follow_up_selection_mode: Optional[bool] = None,
+        follow_up_active: Optional[bool] = None,
         excluded_search_terms: Optional[List[str]] = None,
         skip: int = 0,
         limit: int = 100,
@@ -220,6 +238,7 @@ class CombinedJobSearchService:
         query_start = time.time()
         query = self._build_filtered_query(
             required_terms, filter_terms, current_job, applied_job, remote_job, follow_up_selection_mode,
+            follow_up_active=follow_up_active,
             excluded_search_terms=excluded_search_terms
         )
         query_build_time = time.time() - query_start
@@ -320,7 +339,7 @@ class CombinedJobSearchService:
             score_q = (
                 self.db.query(
                     JobSearchTerm.job_id.label("job_id"),
-                    func.count(distinct(JobSearchTerm.term_id)).label(
+                    count(distinct(JobSearchTerm.term_id)).label(
                         "score"
                     ),  # pylint: disable=E1102
                 )

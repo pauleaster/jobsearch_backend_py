@@ -26,6 +26,7 @@ def filtered_combined_jobs_and_search_terms(
         applied_job=request.applied_job,
         remote_job=request.remote_job,
         follow_up_selection_mode=request.follow_up_selection_mode,
+        follow_up_active=request.follow_up_active,
         excluded_search_terms=request.excluded_search_terms,
     )
     response.headers["X-Total-Count"] = str(total)
@@ -38,6 +39,7 @@ def filtered_combined_jobs_and_search_terms(
         applied_job=request.applied_job,
         remote_job=request.remote_job,
         follow_up_selection_mode=request.follow_up_selection_mode,
+        follow_up_active=request.follow_up_active,
         excluded_search_terms=request.excluded_search_terms,
         skip=request.skip,
         limit=request.limit,

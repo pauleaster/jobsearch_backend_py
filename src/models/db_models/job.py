@@ -20,7 +20,7 @@ class Job(Base):
     application_comments = Column(Text, nullable=True)
     application_date = Column(Date, nullable=True)
     job_date = Column(Date, nullable=True)
-    unsuccessful = Column(String(1), nullable=True)
+    unsuccessful = Column(Text, nullable=True)
     
     salary = Column(Text, nullable=True)
     position = Column(Text, nullable=True)
