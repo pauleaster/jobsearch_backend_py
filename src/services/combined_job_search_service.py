@@ -80,7 +80,7 @@ class CombinedJobSearchService:
                 func.ltrim(func.rtrim(cast(Job.follow_up, String)))
             )
             if follow_up_selection_mode is True:
-                query = query.filter(follow_up_norm == "yes")
+                query = query.filter(follow_up_norm.contains("yes"))
             else:
                 query = query.filter(
                     or_(Job.follow_up.is_(None), follow_up_norm != "no")
